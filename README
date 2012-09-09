@@ -2,3 +2,4 @@ Dependencies:
 
 Python 3.x
 BeautifulSoup 4.x
+pygeoip (optional)

@@ -18,7 +18,6 @@
 import re
 import codecs
 import mimetypes
-#import lxml.html
 import http.cookiejar
 from io import BytesIO
 from time import sleep
