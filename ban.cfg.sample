@@ -1,0 +1,29 @@
+[default]
+user_agent = Mozilla/5.0 (X11; Linux x86_64; rv:14.0) Gecko/20100101 Firefox/14.0.1
+add_signature = True
+
+[myphpbbforum]
+host = http://myphpbbforum.com/
+username = myusername
+password = mypassword
+# forum and topic id where the ban message is gonna be posted
+forum_id = 0
+topic_id = 0
+# ban tab id
+ban_tab  = 0
+message = Banned spambot: [url=%s]%s[/url]
+join_msg = Join IP: %s, Location: %s
+extra_msg = Last post IP: %s\nUsers that posted from this IP: %s
+
+[anotherforum]
+host = http://myotherphpbbforum.net/forum/
+username = myusername
+password = mypassword
+# forum and topic id where the ban message is gonna be posted
+forum_id = 0
+topic_id = 0
+# ban tab id
+ban_tab  = 0
+message = Banned spambot: [url=%s]%s[/url]
+join_msg = Join IP: %s, Location: %s
+extra_msg = Last post IP: %s\nUsers that posted from this IP: %s
