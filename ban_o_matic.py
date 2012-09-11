@@ -80,7 +80,7 @@ if __name__ == '__main__':
                 reason = input('Reason: ')
                 givereason = input('Given reason (leave blank to use the same as above): ')
                 if input('Type "confirm" to confirm: ') == 'confirm':
-                    forum.banUsers(int(cfg.ban_tab), [username], bantime, reason, givereason)
+                    forum.banUsers(int(cfg.ban_tab), [username], bantime, reason, givereason, user)
 
             if input('\nDo you want to post a report? type "post" to confirm: ') == 'post':
                 base_msg = (cfg.message % (cfg.host + forum.profile_url % user, forum.getUsername(user)))

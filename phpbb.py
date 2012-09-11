@@ -317,8 +317,10 @@ class phpBB(object):
         else:
             print('>>> no message')
 
-    def banUsers(self, tab_id, user_list, length, reason, givereason=None):
+    def banUsers(self, tab_id, user_list, length, reason, givereason=None, user_id=None):
         url = urljoin(self.host, self.mcp_url % tab_id)
+        if user_id:
+            url += "&u=%s" % user_id
         form = self._get_form(url, self.mcp_ban_id)
         form['values']['ban'] = "\r\n".join(user_list)
         form['values']['banlength'] = str(length)
