@@ -134,8 +134,8 @@ class phpBB(object):
 
     def _get_form_values(self, soup):
         inputs = soup.find_all("input")
-        return {'values': [(x['name'], x['value']) for x in inputs if x.get("value") and x.get('type') != "submit"],
-                'action': soup['action']}
+        values = {x['name']: x['value'] for x in inputs if x.get("value") and x.get('type') != "submit"}
+        return {'values': values, 'action': soup['action']}
 
     def _get_posts(self, url, count=0):
         out = []
@@ -203,9 +203,9 @@ class phpBB(object):
 
     def login(self, username, password):
         form = self._get_form(urljoin(self.host, self.login_url), self.login_form_id)
-        form['values'].append(('username', username))
-        form['values'].append(('password', password))
-        form['values'].append(('login', 'Login'))
+        form['values']['username'] = username
+        form['values']['password'] = password
+        form['values']['login'] = 'Login'
         self._send_query(urljoin(self.host, self.login_url), form['values'])
         return self.isLogged()
 
@@ -265,7 +265,7 @@ class phpBB(object):
         for post in post_list:
             url = urljoin(self.host, self.delete_url % (post['f'], post['p']))
             form = self._get_form(url, self.delete_form_id)
-            form['values'].append(('confirm', 'Yes'))
+            form['values']['confirm'] = 'Yes'
             queryurl = urljoin(self.host, form['action'])
             html = self._send_query(queryurl, form['values'], {'Referer': url})
             soup = BeautifulSoup(BytesIO(html))
@@ -277,9 +277,9 @@ class phpBB(object):
         url = urljoin(self.host, self.reply_url % (forum, topic))
         try:
             form = self._get_form(url, self.reply_form_id)
-            form['values'].append(('message', message))
-            form['values'].append(('post', 'Submit'))
-            body, content_type = self._encode_multipart_formdata(dict(form['values']))
+            form['values']['message'] = message
+            form['values']['post'] = 'Submit'
+            body, content_type = self._encode_multipart_formdata(form['values'])
             headers = {'Content-Type': content_type}
 
             """ wait at least 2 seconds so phpBB let us post """
@@ -298,9 +298,9 @@ class phpBB(object):
     def changeAvatar(self, imagefile):
         url = urljoin(self.host, self.profile_url % 'avatar')
         form = self._get_form(url, self.ucp_form_id)
-        form['values'].append(('uploadfile', (imagefile, open(imagefile, 'rb').read())))
-        form['values'].append(('submit', 'Submit'))
-        body, content_type = self._encode_multipart_formdata(dict(form['values']))
+        form['values']['uploadfile'] = (imagefile, open(imagefile, 'rb').read())
+        form['values']['submit'] = 'Submit'
+        body, content_type = self._encode_multipart_formdata(form['values'])
         headers = {'Content-Type': content_type, 'Content-length': str(len(body)), 'Referer': url}
 
         """ wait at least 2 seconds so phpBB let us post """
@@ -320,23 +320,20 @@ class phpBB(object):
     def banUsers(self, tab_id, user_list, length, reason, givereason=None):
         url = urljoin(self.host, self.mcp_url % tab_id)
         form = self._get_form(url, self.mcp_ban_id)
-        # clean list since we are providing all the values
-        # also to clean the banexclude radio input type
-        form['values'] = list()
-        form['values'].append(('ban', "\r\n".join(user_list)))
-        form['values'].append(('banlength', str(length)))
-        form['values'].append(('banreason', reason))
+        form['values']['ban'] = "\r\n".join(user_list)
+        form['values']['banlength'] = str(length)
+        form['values']['banlengthother'] = ""
+        form['values']['banreason'] = reason
         if givereason:
-            form['values'].append(('bangivereason', givereason))
+            form['values']['bangivereason'] = givereason
         else:
-            form['values'].append(('bangivereason', reason))
-        form['values'].append(('banlengthother', ""))
-        form['values'].append(('banexclude', "0"))
-        form['values'].append(('bansubmit', 'Submit'))
+            form['values']['bangivereason'] = reason
+        form['values']['banexclude'] = "0"
+        form['values']['bansubmit'] = 'Submit'
         referer = urljoin(self.host, form['action'])
         html = self._send_query(referer, form['values'], {'Referer': url})
         form = self._get_form_from_html(html, "confirm")
-        form['values'].append(('confirm', 'Yes'))
+        form['values']['confirm'] = 'Yes'
         url = urljoin(self.host, form['action'])
 
         html = self._send_query(url, form['values'], {'Referer': referer})
