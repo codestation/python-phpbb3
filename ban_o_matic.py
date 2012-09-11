@@ -54,6 +54,7 @@ if __name__ == '__main__':
             username = forum.getUsername(user)
             print('> Processing user %s\n' % username)
             posts = forum.searchPosts(user)
+            post_info = None
             if posts:
                 post_info = forum.queryPostInfo(posts[0]['f'], posts[0]['p'])
                 forum.showPosts(posts)
