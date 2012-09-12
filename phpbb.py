@@ -169,6 +169,13 @@ class phpBB(object):
                     posts = cols[1].a.text
 
                 join_date = cols[3].text
+
+                span = group = cols[0].span
+                if span:
+                    d['group'] = span.text
+                else:
+                    d['group'] = ""
+
                 d['name'] = user
                 d['id'] = int(user_id)
                 d['posts'] = posts
