@@ -353,8 +353,7 @@ class phpBB(object):
         else:
             print('>>> no message')
 
-    def getUserList(self, limit):
-        start = 0
+    def getUserList(self, limit, start=0):
         users = []
         while start < limit:
             if (start + 25) < limit:
