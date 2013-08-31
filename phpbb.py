@@ -134,7 +134,11 @@ class phpBB(object):
 
     def _get_form_values(self, soup):
         inputs = soup.find_all("input")
-        values = {x['name']: x['value'] for x in inputs if x.get("value") and x.get('type') != "submit"}
+        values = {}
+        for input in inputs:
+            if input.get('type') == 'submit' or not input.get('name') or not input.get('value'):
+                continue
+            values[input['name']] = input['value']
         return {'values': values, 'action': soup['action']}
 
     def _get_posts(self, url, count=0):
