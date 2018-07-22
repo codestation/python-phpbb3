@@ -44,7 +44,9 @@ class phpBB(object):
 
     search_type = ['newposts', 'active_topics', 'unreadposts', 'unanswered', 'egoposts']
 
-    user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:14.0) Gecko/20100101 Firefox/14.0.1'
+    user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:61.0) Gecko/20100101 Firefox/61.0'
+
+    login_cookie_pattern = 'phpbb3_.*_u'
 
     login_form_id = 'login'
     delete_form_id = 'confirm'
@@ -223,7 +225,7 @@ class phpBB(object):
     def isLogged(self):
         if self.jar != None:
             for cookie in self.jar:
-                if re.search('phpbb3_.*_u', cookie.name) and cookie.value:
+                if re.search(self.login_cookie_pattern, cookie.name) and cookie.value:
                     return True
         return False
 
